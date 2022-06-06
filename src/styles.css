@@ -1,3 +1,44 @@
-body {
-    background-color: blue;
+#container {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: center;
+    row-gap: 40px;
+    column-gap: 20px;
 }
+
+
+#board, #comboard {
+    display: grid;
+    grid-template-columns: repeat(10, 20px);
+    grid-template-rows: repeat(10, 20px);
+    background-color: red;
+    gap: 2px;
+    border: 2px solid red;
+}
+
+#targetgrid, #comtargetgrid {
+    display: grid;
+    grid-template-columns: repeat(10, 20px);
+    grid-template-rows: repeat(10, 20px);
+    background-color: black;
+    gap: 2px;
+    border: 2px solid black;
+}
+
+#cell {
+    background-color: goldenrod;
+    transition: all 0.4s;
+}
+
+.targetcell {
+    background-color: red;
+    transition: all 0.4s;
+}
+
+.targetcell:hover {
+    background-color: rgb(16, 153, 139);
+}
+
+/* #cell:hover {
+    background-color: yellow;
+} */
