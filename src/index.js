@@ -21,6 +21,7 @@ const Player = (ships, name) => {
 };
 
 let ships = [];
+let ships2 = [];
 
 const destroyer = Ship(2, 'destroyer');
 const cruiser = Ship(3, 'cruiser');
@@ -28,10 +29,17 @@ const submarine = Ship(3, 'submarine');
 const battleship = Ship(4, 'battleship');
 const carrier = Ship(5, 'carrier');
 
+const destroyer2 = Ship(2, 'destroyer');
+const cruiser2 = Ship(3, 'cruiser');
+const submarine2 = Ship(3, 'submarine');
+const battleship2 = Ship(4, 'battleship');
+const carrier2 = Ship(5, 'carrier');
+
 ships.push(destroyer, cruiser, submarine, battleship, carrier);
+ships2.push(destroyer2, cruiser2, submarine2, battleship2, carrier2);
 
 const player = Player(ships, 'player');
-const com = Player(ships, 'com');
+const com = Player(ships2, 'com');
 
 
 

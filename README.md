@@ -27,19 +27,33 @@ June 5th, 2022
 
     God this is a mess. But I somehow have most of the logic actually working within about one day.Not too shabby.
 
+June 6th, 2022
+
+    Really, this is only day 2. And despite the nonsense spaghetti of code I created yesterday, almost all the functionality outside of AI is there and working, which is pretty cool. Should be able to make the art assets for ship girls and maybe other things today. might make custom ships, which in my head I imagined as difficult yesterday. Thinking about it now, they would just have to have the right dimensions, and then would just be place absolutely relative to the starting cell of a ship with the right orientation. And also be slightly transparent.
+
+    AAAAAAAAAAAAAAAAAAAAAAAAAA I shoud've really structured this differently. Was able to make most of this logic in one day, and the basic version of enemy AI has taken over five hours so far. Pretty much the exact lesson I was expecting to learn from not using TDD. And also not whiteboarding a bit more. It sorta works, but as I add features they become exponentially more difficult to impliment. Yay.
+
 ---To-Do---
 
 -Add game art
 -Digitize game art
 -Fancy up display styling
--Finish ship logic
--Add tests for ship logic
--Spice up battleship base gameplay?
+DONE-Finish ship logic
+CANCEL-Add tests for ship logic
+HARD CANCEL-Spice up battleship base gameplay?
     -Unique ships
     -Powerups
     -Different admiral classes/characters
     -Select one ship that has some ability
     -Select one ship that is a decoy
 DONE-Have AI randomly place legal ships
--make player able to use target grid to hit ships
--Make AI able to use their target grid to hit ships
+DONE-make player able to use target grid to hit ships
+DONE-Make AI able to use their target grid to hit ships
+DONE-Add game end state
+-Add new game button
+-Add peeking at AI board with transforms
+-add custom strike/miss markers
+-Add hit markers to players' boards
+DONE-Prevent AI cells exceeding grid limits
+DONE-Fix double placing ships
+DONE-Fix ship damage bug

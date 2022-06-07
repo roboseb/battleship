@@ -34,11 +34,18 @@ const Gameboard = (() => {
 
     const dirButton = document.getElementById('directionbtn');
     const dirDisplay = document.getElementById('direction'); 
+
+    const resetButton = document.getElementById('reset');
     
     let offset = 1;
     let legalMove = true;
     let playerShipSpaces = [];
     let comShipSpaces = [];
+
+    //Reset game on click.
+    resetButton.addEventListener('click', () => {
+        
+    });
 
     //Add toggle for ship placement direction.
     dirButton.addEventListener('click', () => {
@@ -87,6 +94,8 @@ const Gameboard = (() => {
         }
     }
 
+    
+
     //Place a ship based on offset, index, and ship length.
     const placeShip = (ship, index, currentPlayer, cells) => {
 
@@ -119,7 +128,8 @@ const Gameboard = (() => {
             
             //Update the game state object with the ship.
             stateCells[index + i * offset] = ship;
-            debugTargetCells[index + i * offset].style.backgroundColor = 'lightblue';
+            stateCells[index + i * offset]['hit'] = false;
+            //debugTargetCells[index + i * offset].style.backgroundColor = 'lightblue';
         }
 
     }
@@ -218,7 +228,7 @@ const Gameboard = (() => {
 
             //Show the ship's ghost based on the current ship and
             //the index of the cell hovered.
-            cells[i].addEventListener('mouseover', () => {
+            cells[i].addEventListener('mouseenter', () => {
                 ghostShip(player.ships[index], i, offset, cells);
             });
             
@@ -229,6 +239,11 @@ const Gameboard = (() => {
             });
 
             cells[i].addEventListener('click', () => {
+                //Prevent clicking ships in indentical cells. 
+                if (BoardState.cells[i] !== null) {
+                    return;
+                }
+
                 if (legalMove) {
                     placeShip(player.ships[index], i, player, cells);
                     index ++;
@@ -255,6 +270,7 @@ const Gameboard = (() => {
         //Place computer's ships.
         let index;
         let flip;
+        let chosenCells = [];
 
         for (let i = 0; i < com.ships.length; i++) {
             const randomPlacement = () => {
@@ -267,32 +283,36 @@ const Gameboard = (() => {
             }
 
             //Choose a random index to place a ship;
+            //And reroll in the case of illegal moves being chosen.
             randomPlacement();
 
             while (!legalMove) {
                 randomPlacement();
             }
 
-            //console.log('ghost placed');
-            //console.log(legalMove);
             placeShip(com.ships[i], index, com, comCells)
         }
 
         //Add event listener for marking a strike on the computer.
         for (let i = 0; i < cells.length; i++) {
             targetCells[i].addEventListener('click', () => {
+
+                //Stop the entire function if the game is over.
+                if (getWinner(player,com) !== undefined) return;
                 
+                //Prevent reclicking an already selected cell.
+                if (chosenCells.includes(i)) {
+                    return;
+                }
 
+                chosenCells.push(i);
 
+                //Hit the selected cell if there is a ship there.
                 if (BoardState.comCells[i] !== null) {
-
                     targetCells[i].style.backgroundColor = 'black';
-                    console.log('hit!');
 
                     //Add one damage to the selected ship.
                     BoardState.comCells[i]['damage'] += 1;
-                    console.log(BoardState.comCells[i]['damage']);
-                    console.log(BoardState.comCells[i]['shipLength']);
 
                     //Check for a sunk ship.
                     if (BoardState.comCells[i]['damage'] >= BoardState.comCells[i]['shipLength']) {
@@ -300,30 +320,192 @@ const Gameboard = (() => {
 
                         //Display the whole sunken battleship.
                         for (let j = 0; j < BoardState.comCells.length; j++) {
-                            //console.log(cell);
                             if (BoardState.comCells[j] !== null &&
                                 BoardState.comCells[j].shipName === BoardState.comCells[i].shipName) {
-                                console.log(BoardState.comCells[j].shipName);
                                 targetCells[j].style.backgroundColor = 'green';
                             }
-                            
-                            
                         }
                     }
-                    console.log(BoardState.comCells[i].sunk);
                 } else {
-                    console.log('miss');
+                    //Mark a strike that missed.
                     targetCells[i].style.backgroundColor = 'white';
                 }
+                getWinner(player, com);
+
+                //Play an AI turn if the game is not over.
+                if (getWinner(player,com) !== undefined) return;
+                comTurn();
+
+                getWinner(player, com);
             });
         }        
     }
 
-    const comTurn = () => {
+    let lastFound = null;
+    let comChosenCells = [];
+    let lastChoiceHit = false;
+    let testOffset = 1;
+    let horChecked = false;
+    let topChecked = false;
 
+    const killIndex = (index) => {
+
+        //Start by attempting to destroy a ship horizontally.
+        const killHorizon = () => {
+            //Prevent selecting a previously chosen cell on the edge of a ship.
+            if (comChosenCells.includes(newIndex + 1)) {
+                lastChoiceHit = false;
+            }
+
+            //Change direction if horizontal end of ship is found.
+            if (lastChoiceHit) {
+                newIndex += testOffset;
+            } else {
+                testOffset = -1;
+                //Skip over previously selected cells.
+                while (comChosenCells.includes(newIndex)) {
+                    newIndex += testOffset;
+                }
+            }
+
+            if (newIndex > 99) {
+                newIndex -= 1;
+                //Skip over previously selected cells.
+                while (comChosenCells.includes(newIndex)) {
+                    newIndex -= 1;
+                }
+            }
+        }
+
+        //Start to destroy a ship if it is oriented vertically.
+        const killVert = () => {
+            
+            //Change direction if bottom of ship is found.
+            if (BoardState.cells[newIndex - 10] === 'miss') {
+                topChecked = true;
+            }
+
+            if (topChecked) {
+                testOffset = 10;
+            } else {
+                testOffset = -10;
+            }
+
+            newIndex += testOffset;
+
+            //Skip over previously selected cells.
+            while (comChosenCells.includes(newIndex)) {
+                newIndex += testOffset;
+            }
+
+            //Avoid selecting a cell outside of the grid.
+            if (newIndex < 0) {
+                newIndex += 10;
+                //Skip over previously selected cells.
+                while (comChosenCells.includes(newIndex)) {
+                    newIndex += 10;
+                }
+            }
+
+        }
+
+        let newIndex = index;
+
+        //Switch mode to vertical kill if horizontal is done.
+        if (testOffset !== 1 && BoardState.cells[lastFound -1] === 'miss') {
+            horChecked = true; 
+        }
+
+        //If horizontal of ship is checked, switch to killing vertically.
+        if (horChecked) {
+            killVert();
+        } else {
+            killHorizon();
+        }
+
+        return newIndex;
     }
 
-    
+    //Play the computer's turn.
+    const comTurn = () => {
+
+        //Roll a random cell, and reroll if it is a hit or a miss.
+        let index = Math.round(Math.random() * 99);
+        while (comChosenCells.includes(index)) {
+            index = Math.round(Math.random() * 99);
+        }     
+
+        //If ship has been found and not destroyed, destroy it.
+        if (lastFound !== null) {
+            index = killIndex(lastFound);
+        }
+
+        //Remove the selected cell from com choices.
+        comChosenCells.push(index);
+
+        if (BoardState.cells[index] !== null &&
+            BoardState.cells[index] !== 'miss') {
+     
+            //Mark the ship hit index.
+            lastFound = index;
+            lastChoiceHit = true;
+
+            comTargetCells[index].style.backgroundColor = 'black';
+
+            //Add one damage to the selected ship and particular cell.
+            BoardState.cells[index]['damage'] += 1;
+
+            BoardState.cells[index]['hit'] = true;
+
+            //Check for a sunk ship.
+            if (BoardState.cells[index]['damage'] >= BoardState.cells[index]['shipLength']) {
+                BoardState.cells[index].sunk = true;
+                testOffset = 1;
+                horChecked = false;
+                topChecked = false;
+
+                //Display the whole sunken battleship.
+                for (let j = 0; j < BoardState.cells.length; j++) {
+                    
+                    if (BoardState.cells[j] !== null &&
+                        BoardState.cells[j].shipName === BoardState.cells[index].shipName) {
+                        comTargetCells[j].style.backgroundColor = 'green';
+                        //Switch back to hunting for a ship.
+
+                        if (lastFound !== null) lastFound = null;
+                    }
+                }
+            }
+        } else {
+            //Mark a strike that missed.
+            comTargetCells[index].style.backgroundColor = 'white';
+            BoardState.cells[index] = 'miss';
+            lastChoiceHit = false;
+        }
+    }
+
+    //Check for winner.
+    const getWinner = (player, com) => {
+        let playerTotal = 0;
+        let comTotal = 0;
+
+        //Find the total of ships sunk for the player and computer.
+        player.ships.forEach(ship => {
+            if (ship.sunk) comTotal++;
+        });
+        com.ships.forEach(ship => {
+            if (ship.sunk) playerTotal++;
+        });
+
+        //Return the winner if there is one.
+        if (playerTotal === 5) {
+            console.log('Player Wins');
+            return player;
+        } else if (comTotal === 5) {
+            console.log('Computer wins!');
+            return com;
+        }
+    }
 
     return {drawBoard, placeShip, setup, getIllegalCells}
 })();
