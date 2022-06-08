@@ -33,10 +33,18 @@ June 6th, 2022
 
     AAAAAAAAAAAAAAAAAAAAAAAAAA I shoud've really structured this differently. Was able to make most of this logic in one day, and the basic version of enemy AI has taken over five hours so far. Pretty much the exact lesson I was expecting to learn from not using TDD. And also not whiteboarding a bit more. It sorta works, but as I add features they become exponentially more difficult to impliment. Yay.
 
+June 7th, 2022
+
+    Been working pretty consistently for the past few weeks, around 40 hours per week. Also been hitting the gym regularly. Feeling pretty good. But at some point, it will be winter and I'll want to be not in this country if possible by then. I also have limited funds to be studying full time, so ideally I will be finished with TOP in about three months. Only five projects left in this JS section, and the advanced HTML/CSS section looks quite short. The last variable is the node.js section. No idea how long that will actually take. As usual, time will tell.
+
+    In regards to this project, mostly only need to add the art assests and logic. And a reset button. And spurce up the whole thing. Maybe a day and a half left. Not bad. I'm also expecting many of the next projects in the JS section to be done within three or four days of starting them, as the past half dozen have not been that long to complete.
+
+    Art is all done. Most of the shipgirls I like. I really sabotaged myself with how I structured this whole thing by the way, if you couldn't tell. Most of DOM cell color changing was done with inlines css styles through JS, so changing them to work with classes was a nightmare.
+
 ---To-Do---
 
 -Add game art
--Digitize game art
+DONE-Digitize game art
 -Fancy up display styling
 DONE-Finish ship logic
 CANCEL-Add tests for ship logic
@@ -50,10 +58,12 @@ DONE-Have AI randomly place legal ships
 DONE-make player able to use target grid to hit ships
 DONE-Make AI able to use their target grid to hit ships
 DONE-Add game end state
--Add new game button
+DONE-Add new game button
 -Add peeking at AI board with transforms
 -add custom strike/miss markers
 -Add hit markers to players' boards
 DONE-Prevent AI cells exceeding grid limits
 DONE-Fix double placing ships
 DONE-Fix ship damage bug
+-Add actual victory or loss screen
+-add credit to gosti on dribbble

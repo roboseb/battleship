@@ -1,43 +1,106 @@
+@font-face {
+    font-family: punk;
+    src: url('/dist/punk.ttf');
+}
+
+@font-face {
+    font-family: typewriter;
+    src: url('/dist/typewriter.ttf');
+}
+
+body {
+    margin: 0;
+    background-color: #84828F;
+}
+
 #container {
+
+}
+
+#header {
+
+}
+
+#header>h1 {
+    font-family: typewriter, sans-serif;
+    font-size: 4rem;
+    margin: 0;
+}
+
+#header>h3 {
+    font-family: typewriter, sans-serif;
+    font-size: 2rem;
+    margin: 0;
+}
+
+#gridscontainer {
     display: grid;
     grid-template-columns: auto auto;
-    justify-content: center;
     row-gap: 40px;
     column-gap: 20px;
 }
 
-
-#board, #comboard {
+#board, #comboard, #targetgrid, #comtargetgrid {
     display: grid;
-    grid-template-columns: repeat(10, 20px);
-    grid-template-rows: repeat(10, 20px);
-    background-color: red;
-    gap: 2px;
-    border: 2px solid red;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    background-color: transparent;
+    gap: 4px;
+    border: 4px solid transparent;
+    height: 50vh;
+    aspect-ratio: 1 / 1;
 }
 
-#targetgrid, #comtargetgrid {
-    display: grid;
-    grid-template-columns: repeat(10, 20px);
-    grid-template-rows: repeat(10, 20px);
-    background-color: black;
-    gap: 2px;
-    border: 2px solid black;
+#comboard, #comtargetgrid {
+    display: none;
+    aspect-ratio: initial;
 }
 
-#cell {
-    background-color: goldenrod;
+
+
+.cell {
+    background-color: #120309;
     transition: all 0.4s;
+    border-radius: 10px;
+}
+
+.shipghost {
+    background-color: burlywood;
+}
+
+.illegal {
+    background-color: red;
 }
 
 .targetcell {
-    background-color: red;
+    background-color: #7F0799;
     transition: all 0.4s;
+    border-radius: 10px;
 }
 
 .targetcell:hover {
     background-color: rgb(16, 153, 139);
 }
+
+.ship {
+    background-color: blue !important;
+}
+
+.hit {
+    background-color:red !important;
+}
+
+.sunkenship {
+    background-color:black !important;
+}
+
+
+
+.miss {
+    background-color: #fff !important;
+}
+
+
 
 /* #cell:hover {
     background-color: yellow;

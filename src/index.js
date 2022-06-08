@@ -38,12 +38,19 @@ const carrier2 = Ship(5, 'carrier');
 ships.push(destroyer, cruiser, submarine, battleship, carrier);
 ships2.push(destroyer2, cruiser2, submarine2, battleship2, carrier2);
 
-const player = Player(ships, 'player');
-const com = Player(ships2, 'com');
+let player = Player(ships, 'player');
+let com = Player(ships2, 'com');
 
 
 
 Gameboard.setup(player, com);
+
+//Reinitialize the board on reset button click.
+const resetButton = document.getElementById('resetbtn');
+
+resetButton.addEventListener('click', () => {
+    Gameboard.setup(player, com);
+});
 
 
 
