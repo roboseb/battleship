@@ -1,4 +1,5 @@
 export {Gameboard}
+import { animate, animateCap, shakeGrid } from "./animate";
 
 //Board state object with data for hit cells, and ships within those cells.
 const BoardState = (() => {
@@ -50,6 +51,11 @@ const Gameboard = (() => {
     let legalMove = true;
     let playerShipSpaces = [];
     let comShipSpaces = [];
+    let lastGhost;
+    let initialSetup = true;
+    let initialCombat = true;
+
+    let chosenCells = [];
 
     //Reset game on click.
     resetButton.addEventListener('click', () => {
@@ -62,11 +68,18 @@ const Gameboard = (() => {
 
         //Reset AI logic variables.
         lastFound = null;
+        chosenCells = [];
         comChosenCells = [];
         lastChoiceHit = false;
         testOffset = 1;
         horChecked = false;
         topChecked = false;
+        resetGrid(cells);
+        resetGrid(comCells);
+        resetGrid(targetCells);
+        resetGrid(comTargetCells);
+
+        shakeGrid();
     });
 
     //Add toggle for ship placement direction.
@@ -80,11 +93,40 @@ const Gameboard = (() => {
         }
     });
 
+    //Add toggle on orientation on right click.
+    window.addEventListener('contextmenu', (event) => {
+        //Prevent showing context menu on right click.
+        event.preventDefault();
+    
+        //Remove previous ship ghost.
+        Array.from(cells).forEach(cell => {
+            cell.classList.remove('shipghost');
+        });
+        
+        //Toggle offset and redraw ship ghost.
+        if (offset === 1) {
+            offset = 10;
+            dirDisplay.innerText = 'Vertical';
+        } else if (offset === 10){
+            offset = 1;
+            dirDisplay.innerText = 'Horizontal';
+        }
+        ghostShip(lastGhost[0], lastGhost[1], offset, lastGhost[3]);
+    });
+
+    //Reset grid to inital state.
+    const resetGrid = (grid) => {
+        Array.from(grid).forEach(cell => {
+            if (cell.classList.contains('cell')) {
+                cell.className = 'cell';
+            } else if (cell.classList.contains('targetcell')) {
+                cell.className = 'targetcell';
+            }
+        });
+    }
+
     //Draw a 10 x 10 grid for ships.
     const drawBoard = () => {
-        //Clear board if it was there previously.
-        boardBox.innerText = '';
-
         for (let i = 0; i < 100; i++) {
             const cell = document.createElement('div');
             cell.className = 'cell';
@@ -94,9 +136,6 @@ const Gameboard = (() => {
 
     //Draw a 10 x 10 grid for computer ships.
     const drawComBoard = () => {
-        //Clear board if it was there previously.
-        comBoardBox.innerText = '';
-
         for (let i = 0; i < 100; i++) {
             const cell = document.createElement('div');
             cell.className = 'cell';
@@ -106,9 +145,6 @@ const Gameboard = (() => {
 
     //Draw a 10 x 10 grid for targeting the computer.
     const drawTargetGrid = () => {
-        //Clear board if it was there previously.
-        targetGrid.innerText = '';
-
         for (let i = 0; i < 100; i++) {
             const cell = document.createElement('div');
             cell.classList.add('targetcell');
@@ -118,9 +154,6 @@ const Gameboard = (() => {
     
     //Draw a 10 x 10 grid for the computer targeting the player.
     const drawComTargetGrid = () => {
-        //Clear board if it was there previously.
-        comTargetGrid.innerText = '';
-
         for (let i = 0; i < 100; i++) {
             const cell = document.createElement('div');
             cell.classList.add('targetcell');
@@ -132,6 +165,9 @@ const Gameboard = (() => {
 
     //Place a ship based on offset, index, and ship length.
     const placeShip = (ship, index, currentPlayer, cells) => {
+
+        //Animate the relevant ship girl.
+        animate(ship, 'def');
 
         //Set the used spaces to avoid based on player.
         //And the assign the placed spaces to their index in game state.
@@ -171,6 +207,7 @@ const Gameboard = (() => {
 
     //Display where a ship would placed in a hovered location.
     const ghostShip = (ship, index, offset, cells) => {
+        lastGhost = [ship, index, offset, cells];
         const illegals = getIllegalCells(ship.shipLength);
 
         legalMove = true;
@@ -252,10 +289,16 @@ const Gameboard = (() => {
 
     //Let the player place all their ships.
     const setup = (player, com) => {
-        drawBoard();
-        drawComBoard();
-        drawTargetGrid();
-        drawComTargetGrid();
+        //Only draw cells on initial setup.
+
+        if (initialSetup) {
+            drawBoard();
+            drawComBoard();
+            drawTargetGrid();
+            drawComTargetGrid();
+            initialSetup = false;
+        }
+
 
         //Reset damage and sunk on all ships.
         player.ships.forEach(ship => {
@@ -317,7 +360,7 @@ const Gameboard = (() => {
         //Place computer's ships.
         let index;
         let flip;
-        let chosenCells = [];
+        
 
         for (let i = 0; i < com.ships.length; i++) {
             const randomPlacement = () => {
@@ -338,6 +381,10 @@ const Gameboard = (() => {
             }
 
             placeShip(com.ships[i], index, com, comCells)
+        }
+
+        if (!initialCombat) {
+            return;
         }
 
         //Add event listener for marking a strike on the computer.
@@ -362,9 +409,16 @@ const Gameboard = (() => {
                     //Add one damage to the selected ship.
                     BoardState.comCells[i]['damage'] += 1;
 
+                    //Animate the captain.
+                    animateCap('glad');
+
                     //Check for a sunk ship.
                     if (BoardState.comCells[i]['damage'] >= BoardState.comCells[i]['shipLength']) {
                         BoardState.comCells[i].sunk = true;
+
+                        //Animate the captain.
+                        animateCap('mad');
+                        shakeGrid();
 
                         //Display the whole sunken battleship.
                         for (let j = 0; j < BoardState.comCells.length; j++) {
@@ -387,7 +441,9 @@ const Gameboard = (() => {
 
                 getWinner(player, com);
             });
-        }        
+        }       
+        
+        initialCombat = false;
     }
 
     let lastFound = null;
@@ -507,12 +563,21 @@ const Gameboard = (() => {
 
             BoardState.cells[index]['hit'] = true;
 
+            //Animate ship girl.
+            animate(BoardState.cells[index], 'def');
+
             //Check for a sunk ship.
             if (BoardState.cells[index]['damage'] >= BoardState.cells[index]['shipLength']) {
                 BoardState.cells[index].sunk = true;
                 testOffset = 1;
                 horChecked = false;
                 topChecked = false;
+
+                //Animate the captain and the ship girl.
+                animateCap('def');
+                animate(BoardState.cells[index], 'mad');
+
+                shakeGrid();
 
                 //Display the whole sunken battleship.
                 for (let j = 0; j < BoardState.cells.length; j++) {
@@ -540,7 +605,6 @@ const Gameboard = (() => {
         let playerTotal = 0;
         let comTotal = 0;
 
-        console.log(player.ships);
         
 
         //Find the total of ships sunk for the player and computer.

@@ -7,26 +7,50 @@
     
   </head>
   <body>
-      <div id='container'>
+    <div id='container'>
         <div id='header'>
-            <h1>Battle to Ship</h1>
+            <h1>ShipBattle</h1>
             <h3>The battle for shipping shipgirls</h3>
         </div>
 
         <div id='gridscontainer'>
+            <h2>Your Ships</h2>
+            <div></div>
+            <h2>Enemy Territory</h2>
             <div id='board'></div>
+            <div id='separator'></div>
             <div id='targetgrid'></div>
-    
+
             <div id='comboard'></div>
             <div id='comtargetgrid'></div>
-          </div>
-      </div>
+        </div>
 
-      <div id='infobox'>
-        <h3 id='direction'>Horizontal</h3>
-        <button id='directionbtn'>Direction</button>
-        <button id='resetbtn'>Reset</button>
-      </div>
+        <div id='infobox'>
+            <div id='capbox'>
+             
+                <img id='capimg' src="/images/cap-mad.png" alt="A portrait of you, the admiral">
+            </div>
+
+            <div id='btnbox'>
+                
+                <div id='scorebox'>
+                    <div id='score'>55</div>
+                </div>
+                <h2>score</h2>
+                <h3 id='direction'>Horizontal</h3>
+                <button id='directionbtn'>Direction</button>
+                <button id='resetbtn'>Reset</button>         
+            </div>
+
+            <div id='girlbox'>
+                <img id='girlimg' src="/images/bat-glad.png" alt="A portrait of your shipgirl">
+            </div>
+        </div>
+
+
+    </div>
+
+
 
       
   </body>

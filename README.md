@@ -41,6 +41,14 @@ June 7th, 2022
 
     Art is all done. Most of the shipgirls I like. I really sabotaged myself with how I structured this whole thing by the way, if you couldn't tell. Most of DOM cell color changing was done with inlines css styles through JS, so changing them to work with classes was a nightmare.
 
+June 8th, 2022
+
+    Despite my ridiculous code, I'm mostly on track with this project, including about four yesterday spent drawing the art. Might be chance that implementing the art will take a while, but really all that's left is that and styling.
+
+    And the styling looks good! Took me a while yesterday to find good inspiration for an interesting theme and color palette, but I stumbled across some Korean's thing on dribbble. So I stole his art for the captain, and will be theming the UI to that art. Also really happy with the proper styling for the boards, they look profesh as fuck.
+
+    Base layout is done, and as usual took longer than expected to get mostly right. Worth the effort though. Half done the ship girl animation function, and it seems like it'll be quite straightforward, as it's working at a basic level already.
+
 ---To-Do---
 
 -Add game art
@@ -66,4 +74,9 @@ DONE-Prevent AI cells exceeding grid limits
 DONE-Fix double placing ships
 DONE-Fix ship damage bug
 -Add actual victory or loss screen
--add credit to gosti on dribbble
+-add credit to gosti on dribbble and fonts and me
+-add shortcut for rotating ship placement
+-implement score counter
+-add buttons to watch specific shipgirl react to your strikes
+DONE-fix scrollbar bug
+-fix ship ghost remaining bug

@@ -8,36 +8,90 @@
     src: url('/dist/typewriter.ttf');
 }
 
+@font-face {
+    font-family: vogue;
+    src: url('/dist/Vogue.ttf');
+}
+
+@font-face {
+    font-family: sharon;
+    src: url('/dist/sharon.ttf');
+}
+
+:root {
+    --baby-pink: #f2ccc3;
+    --greyblack: rgb(110, 110, 110);
+    --yellow-green: #CBE896;
+    --shipgold: #ae8e1c;
+    --violet-red: #c52184;
+    --carribean: #0dc090;
+}
+
 body {
     margin: 0;
-    background-color: #84828F;
+    font-family: 'Times New Roman', Times, serif;
+    overflow: hidden;
 }
 
 #container {
-
+    background-color: rgb(255, 0, 0);
+  
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px 0 15px;
+    overflow-x: hidden;
 }
 
 #header {
-
+    box-sizing: border-box;
+    width: 100vw;
+    display: flex;
+    gap: 10px;
+    padding: 40px 0px 10px 0px;
+    align-items: flex-end;
 }
 
 #header>h1 {
-    font-family: typewriter, sans-serif;
+    font-family: vogue, sans-serif;
     font-size: 4rem;
     margin: 0;
+    font-weight: lighter;
 }
 
 #header>h3 {
-    font-family: typewriter, sans-serif;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: lighter;
     font-size: 2rem;
     margin: 0;
+    padding-bottom: 5px;
 }
 
 #gridscontainer {
+    box-sizing: border-box;
     display: grid;
-    grid-template-columns: auto auto;
-    row-gap: 40px;
+    grid-template-columns: auto auto auto;
+    justify-content: center;
+    align-items: center;
     column-gap: 20px;
+    background-color: var(--baby-pink);
+    margin: 25px 0 25px 0;
+    padding: 30px 0 30px 0;
+    border-radius: 15px;
+    z-index: 1;
+}
+
+#gridscontainer>h2 {
+    font-weight: lighter;
+    text-align: center;
+    margin: 0 0 15px 0;
+}
+
+#gridscontainer>#separator {
+    width: 14px;
+    height: 85%;
+    background-color: rgba(0, 0, 0, 0.294);
+    border-radius: 25px;
 }
 
 #board, #comboard, #targetgrid, #comtargetgrid {
@@ -47,16 +101,14 @@ body {
     background-color: transparent;
     gap: 4px;
     border: 4px solid transparent;
-    height: 50vh;
-    aspect-ratio: 1 / 1;
+    width: 400px;
+    height: 400px;
 }
 
 #comboard, #comtargetgrid {
     display: none;
     aspect-ratio: initial;
 }
-
-
 
 .cell {
     background-color: #120309;
@@ -65,43 +117,231 @@ body {
 }
 
 .shipghost {
-    background-color: burlywood;
+    background-color: var(--shipgold);
 }
 
 .illegal {
-    background-color: red;
+    background-color: var(--violet-red);
 }
 
 .targetcell {
-    background-color: #7F0799;
-    transition: all 0.4s;
+    background-color: black;
+    transition: background-color 0.5s, border-radius 0.3s, margin 0.3s;
     border-radius: 10px;
 }
 
 .targetcell:hover {
-    background-color: rgb(16, 153, 139);
+    background-color: var(--carribean);
 }
 
 .ship {
-    background-color: blue !important;
+    background-color: teal !important;
+    border-radius: 5px !important;
 }
 
 .hit {
-    background-color:red !important;
+    background-color: red !important;
+    border-radius: 5px;
 }
 
 .sunkenship {
-    background-color:black !important;
+    background-color: teal !important;
 }
 
 
 
 .miss {
-    background-color: #fff !important;
+    background-color: rgba(0, 0, 0, 0.294) !important;
+    border-radius: 50px;
+    margin: 14px;
+}
+
+#infobox {
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    align-items: flex-end;
+    overflow: hidden;
+}
+
+#btnbox {
+    display: flex;
+    flex-direction: column;
+    width: 30vw;
+    position: relative;
+    height: 100%;
+    align-items: center;
+}
+
+#scorebox {
+    position: absolute;
+    right: 20%;
+    top: 20%;
+}
+
+#score {
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bolder;
+    font-size: 10rem;
+}
+
+#btnbox>h2 {
+    font-size: 6.5rem;
+    font-family: Vogue, serif;
+    font-weight: lighter;
+    margin: 0;
+    color: white;
+}
+
+#btnbox>h3 {
+    font-family: vogue, serif;
+    font-size: 1.9rem;
+    margin: 0;
+    position: absolute;
+    bottom: 0;
+    left: 145px;
+
+}
+
+button {
+    background-color: black;
+    color: white;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 2rem;
+    border: none;
+    border-radius: 15px;
+    padding: 10px;
+    position: absolute;
+    transition: all 0.4s;
+}
+
+button:hover {
+    background-color: white;
+    color: black;
+    border-radius: 0px;
+    padding-left: 40px;
+    padding-right: 20px;
+}
+
+button:active {
+    background-color: teal;
+}
+
+#resetbtn {
+    bottom: 0;
+    left: 0;
+    transform-origin: top left;
+    transform: rotate(-90deg) translate(-58px, 80px);
+}
+
+#directionbtn {
+    bottom: 0;
+    left: 0;
+    transform-origin: top left;
+    transform: rotate(-90deg) translate(-58px, 15px);
+}
+
+#capbox, #girlbox {
+    
+    position: relative;
+    flex-grow: 1;
+    border-radius: 15px;
+}
+
+#capbox {
+    overflow: hidden;
+    height: 100%;
+}
+
+#girlbox {
+    height: 50%;
+    background-color: var(--baby-pink);
 }
 
 
 
-/* #cell:hover {
-    background-color: yellow;
-} */
+#capimg, #girlimg {
+    position: absolute;
+}
+
+#capimg {
+    height: 500px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -150px;
+}
+
+#girlimg {
+    right: 50%;
+    transform: translate(50%);
+    bottom: 0;
+    height: 350px;
+    filter: grayscale(100%);
+    transition: filter 0.4s;
+}
+
+#girlimg:hover {
+    filter: grayscale(0%);
+}
+
+.girlglad {
+    animation: girlglad 0.6s;
+}
+
+.girlmad {
+    animation: girlmad 0.4s 2;
+}
+
+.girldef {
+    animation: girldef 0.4s;
+}
+
+
+@keyframes girlglad {
+    0% {transform: translateX(50%) translateY(0px)}
+    25% {transform: translateX(50%) translateY(-35px)}
+    50% {transform: translateX(50%) translateY(0px)}
+    75% {transform: translateX(50%) translateY(-10px)}
+    100% {transform: translateX(50%) translateY(0px)}
+}
+
+@keyframes girlmad {
+    0% {transform: translateX(50%) translateY(0px)}
+    30% {transform: translateX(50%) translateY(10px)}
+    50% {transform: translateX(45%) translateY(20px)}
+    75% {transform: translateX(55%) translateY(30px)}
+    100% {transform: translateX(50%) translateY(0px)}
+}
+
+@keyframes girldef {
+    0% {transform: translate(50%, 0px) rotate(0deg);}
+    50% {transform: translate(45%, 10px) rotate(-10deg);}
+    100% {transform: translate(50%, 0px) rotate(0deg);}
+
+}
+
+.capani {
+    animation: capani 0.4s;
+}
+
+@keyframes capani {
+    0% {transform: translate(-50%, 0px)}
+    65% {transform: translate(-50%, 10px)}
+    100% {transform: translate(-50%, 0px)}
+}
+
+.gridshake {
+    animation: gridshake 0.5s;
+}
+
+@keyframes gridshake {
+    0% {transform: scale(100%) rotate(0deg);
+        filter: drop-shadow(0px 0px 7px black)}
+    25% {transform: scale(103%) rotate(7deg); 
+        filter: drop-shadow(0px 7px 7px black)}
+    50% {transform: scale(105%) rotate(-3deg);
+        filter: drop-shadow(0px 15px 7px black)}
+    100% {transform: scale(100%) rotate(0deg);
+        filter: drop-shadow(0px 0px 7px black)}
+}

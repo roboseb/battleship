@@ -1,6 +1,6 @@
 import './styles.css';
 import { Gameboard } from './gameboard';
-
+import { animate, animateCap } from './animate';
 export {sum}
 
 function sum(a, b) {
@@ -52,6 +52,17 @@ resetButton.addEventListener('click', () => {
     Gameboard.setup(player, com);
 });
 
+
+//Debugger for animating ship girls.
+window.addEventListener('click', () => {
+    const moods = ['def', 'glad', 'mad']
+    const randMood = moods[Math.floor(Math.random() * 3)];
+
+    const randIndex = Math.floor(Math.random() * 5);
+
+    // animate(player.ships[randIndex], randMood);
+    // animateCap(randMood);
+});
 
 
 
