@@ -1,21 +1,11 @@
 @font-face {
-    font-family: punk;
-    src: url('/dist/punk.ttf');
-}
-
-@font-face {
-    font-family: typewriter;
-    src: url('/dist/typewriter.ttf');
-}
-
-@font-face {
     font-family: vogue;
     src: url('/dist/Vogue.ttf');
 }
 
 @font-face {
-    font-family: sharon;
-    src: url('/dist/sharon.ttf');
+    font-family: profile;
+    src: url('/dist/Profile.ttf');
 }
 
 :root {
@@ -31,6 +21,10 @@ body {
     margin: 0;
     font-family: 'Times New Roman', Times, serif;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: red;
 }
 
 #container {
@@ -40,16 +34,20 @@ body {
     display: flex;
     flex-direction: column;
     padding: 0 15px 0 15px;
-    overflow-x: hidden;
+    
+    position: relative;
+    min-width: 1050px;
+    max-width: 1300px;
 }
 
 #header {
     box-sizing: border-box;
-    width: 100vw;
+    width: 100%;
     display: flex;
     gap: 10px;
     padding: 40px 0px 10px 0px;
     align-items: flex-end;
+    position: relative;
 }
 
 #header>h1 {
@@ -67,6 +65,42 @@ body {
     padding-bottom: 5px;
 }
 
+#headerbtnbox {
+    position: absolute;
+    right: 0px;
+    top: 30%;
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+    background-color: transparent;
+    height: 100%;
+    z-index: 2;
+}
+
+#colorbtn {
+    position: relative;
+    font-family: profile, serif;
+    font-size: 2.5rem;
+}
+
+#creditsbtn {
+    position: relative;
+    font-size: 2.5rem;
+    align-self: flex-start;
+    text-align: end;
+    height: 4rem;
+    overflow: hidden;
+    width: 8.5rem;
+    white-space: nowrap;
+}
+
+#creditsbtn:hover {
+    height: 16rem;
+    background-color: rgba(255, 255, 255, 0.753);
+    width: 37rem;
+    backdrop-filter: blur(1px); 
+}
+
 #gridscontainer {
     box-sizing: border-box;
     display: grid;
@@ -79,6 +113,7 @@ body {
     padding: 30px 0 30px 0;
     border-radius: 15px;
     z-index: 1;
+    position: relative;
 }
 
 #gridscontainer>h2 {
@@ -92,6 +127,40 @@ body {
     height: 85%;
     background-color: rgba(0, 0, 0, 0.294);
     border-radius: 25px;
+}
+
+#iconbox {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    left: 0;
+    top: 28px;
+    height: 100%;
+    width: 85px;
+    align-items: center;
+    justify-content: center;
+}
+
+#iconbox>img {
+    height: 40px;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    transition: all 0.4s;
+}
+
+#iconbox>img:hover {
+    height: 70px;
+}
+
+#iconname {
+    transform: rotate(-90deg) translate(50%, 0);
+    font-size: 1.5rem;
+}
+
+#icondmg {
+    transform: rotate(-90deg) translate(-50%, 0px);
+    font-size: 1.5rem;
 }
 
 #board, #comboard, #targetgrid, #comtargetgrid {
@@ -148,18 +217,22 @@ body {
     background-color: teal !important;
 }
 
-
-
 .miss {
     background-color: rgba(0, 0, 0, 0.294) !important;
     border-radius: 50px;
     margin: 14px;
 }
 
+.highlighted {
+    background-color: rgb(2, 70, 70) !important;
+    border-radius: 5px !important;
+    box-sizing: border-box;
+    margin: -5px;
+}
+
 #infobox {
     flex-grow: 1;
     display: flex;
-    justify-content: space-between;
     margin-bottom: 15px;
     align-items: flex-end;
     overflow: hidden;
@@ -168,7 +241,7 @@ body {
 #btnbox {
     display: flex;
     flex-direction: column;
-    width: 30vw;
+    flex-grow: 1;
     position: relative;
     height: 100%;
     align-items: center;
@@ -187,6 +260,7 @@ body {
 }
 
 #btnbox>h2 {
+    position: absolute;
     font-size: 6.5rem;
     font-family: Vogue, serif;
     font-weight: lighter;
@@ -257,9 +331,10 @@ button:active {
 #girlbox {
     height: 50%;
     background-color: var(--baby-pink);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-evenly;
 }
-
-
 
 #capimg, #girlimg {
     position: absolute;
@@ -281,10 +356,6 @@ button:active {
     transition: filter 0.4s;
 }
 
-#girlimg:hover {
-    filter: grayscale(0%);
-}
-
 .girlglad {
     animation: girlglad 0.6s;
 }
@@ -295,6 +366,10 @@ button:active {
 
 .girldef {
     animation: girldef 0.4s;
+}
+
+.girlcolor {
+    filter: grayscale(0%) !important;
 }
 
 
@@ -344,4 +419,36 @@ button:active {
         filter: drop-shadow(0px 15px 7px black)}
     100% {transform: scale(100%) rotate(0deg);
         filter: drop-shadow(0px 0px 7px black)}
+}
+
+#gameoverpanel {
+    position: absolute;
+    left: 50%;
+    top: 55%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+#gamestatus {
+    font-family: Vogue, serif;
+    font-size: 13rem;
+    font-weight: bolder;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.466);
+    padding: 40px 40px 0px 40px;
+    filter: opacity(0);
+    /* backdrop-filter: blur(0px); */
+    border-radius: 15px;
+    pointer-events: none;
+}
+
+#gamestatus.panelshown {
+    animation: gamestatus 3s;
+    filter: opacity(1);
+}
+
+@keyframes gamestatus {
+    from {filter: opacity(0);}
+    to {filter: opacity(1);}
 }

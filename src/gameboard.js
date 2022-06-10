@@ -1,5 +1,5 @@
 export {Gameboard}
-import { animate, animateCap, shakeGrid } from "./animate";
+import { animate, animateCap, shakeGrid, showEndGame, hideMessage } from "./animate";
 
 //Board state object with data for hit cells, and ships within those cells.
 const BoardState = (() => {
@@ -56,6 +56,9 @@ const Gameboard = (() => {
     let initialCombat = true;
 
     let chosenCells = [];
+    let score = 0;
+    let shipIndex = 0;
+    let gameOver = false;
 
     //Reset game on click.
     resetButton.addEventListener('click', () => {
@@ -74,12 +77,22 @@ const Gameboard = (() => {
         testOffset = 1;
         horChecked = false;
         topChecked = false;
+        shipIndex = 0;
+        gameOver = false;
+
+
         resetGrid(cells);
         resetGrid(comCells);
         resetGrid(targetCells);
         resetGrid(comTargetCells);
 
         shakeGrid();
+        hideMessage();
+
+        //Remove event listeners from target cells.
+        for (let i = 0; i < targetCells.length; i++) {
+            targetCells[i].replaceWith(targetCells[i].cloneNode(true));
+        }
     });
 
     //Add toggle for ship placement direction.
@@ -111,8 +124,11 @@ const Gameboard = (() => {
             offset = 1;
             dirDisplay.innerText = 'Horizontal';
         }
+        hideGhost(cells);
         ghostShip(lastGhost[0], lastGhost[1], offset, lastGhost[3]);
     });
+
+
 
     //Reset grid to inital state.
     const resetGrid = (grid) => {
@@ -161,7 +177,12 @@ const Gameboard = (() => {
         }
     }
 
-    
+    const updateScore  = () => {
+        const scoreDisplay = document.getElementById('score');
+
+        score++;
+        scoreDisplay.innerText = score;
+    }
 
     //Place a ship based on offset, index, and ship length.
     const placeShip = (ship, index, currentPlayer, cells) => {
@@ -207,6 +228,7 @@ const Gameboard = (() => {
 
     //Display where a ship would placed in a hovered location.
     const ghostShip = (ship, index, offset, cells) => {
+
         lastGhost = [ship, index, offset, cells];
         const illegals = getIllegalCells(ship.shipLength);
 
@@ -259,21 +281,20 @@ const Gameboard = (() => {
     }
 
     //Hide a previously displayed ship ghost.
-    const hideGhost = (ship, index, offset, cells) => {
-        for (let i = 0; i < ship.shipLength; i++) {
-            
-            //Stop clearing cells past the grid.
-            if (index + i * offset > 99) break;
-
+    const hideGhost = (cells) => {
+        Array.from(cells).forEach(cell => {
             //Clear cells that are not currently housing a ship.
-            if (cells[index + i * offset].classList.contains('ship')) {
-                cells[index + i * offset].className = 'cell ship';
+            if (cell.classList.contains('ship')) {
+                if (cell.classList.contains('hit')) {
+                    cell.className = 'cell ship hit';
+                } else {
+                    cell.className = 'cell ship';
+                }
             } else {
-                cells[index + i * offset].classList.remove('shipghost');
-                cells[index + i * offset].classList.remove('illegal');
+                cell.classList.remove('shipghost');
+                cell.classList.remove('illegal');
             }
-            
-        }
+        });
     }
 
     const getIllegalCells = (shipLength) => {
@@ -289,8 +310,41 @@ const Gameboard = (() => {
 
     //Let the player place all their ships.
     const setup = (player, com) => {
-        //Only draw cells on initial setup.
 
+        //Display ship info when hovering over an icon.
+        const icons = Array.from(document.querySelectorAll('.icon'));
+        const nameDisplay = document.getElementById('iconname');
+        const dmgDisplay = document.getElementById('icondmg');
+        for (let i = 0; i < 5; i++) {
+            //Prevent re-adding listeners.
+            if (!initialSetup) continue;
+            icons[i].addEventListener('mouseover', () => {
+                nameDisplay.innerText = player.ships[i].shipName.toUpperCase();
+                dmgDisplay.innerText = `${player.ships[i].damage} DMG`;
+                animate(player.ships[i], 'def');
+                
+                //Highlight hovered ship.
+                for (let j = 0; j < 100; j++) {
+                    if (BoardState.cells[j] !== null &&
+                        BoardState.cells[j].shipName === icons[i].id) {
+                        cells[j].classList.add('highlighted');
+                    }
+                }
+            });
+
+            //Remove highlighting on mouse leave.
+            icons[i].addEventListener('mouseleave', () => {
+                hideGhost(cells);
+            });
+
+            icons[i].addEventListener('click', () => {
+                animate(player.ships[i], 'glad');
+            });
+        }
+
+        
+
+        //Only draw cells on initial setup.
         if (initialSetup) {
             drawBoard();
             drawComBoard();
@@ -310,8 +364,7 @@ const Gameboard = (() => {
             ship.sunk = false;
         });
 
-        //Set index for currently selected ship.
-        let index = 0;
+        
 
         //Initialize event listeners for all cells.
         for (let i = 0; i < cells.length; i++) {
@@ -319,13 +372,13 @@ const Gameboard = (() => {
             //Show the ship's ghost based on the current ship and
             //the index of the cell hovered.
             cells[i].addEventListener('mouseenter', () => {
-                ghostShip(player.ships[index], i, offset, cells);
+                ghostShip(player.ships[shipIndex], i, offset, cells);
             });
             
             //Show the ship's ghost based on the current ship and
             //the index of the cell hovered.
             cells[i].addEventListener('mouseleave', () => {
-                hideGhost(player.ships[index], i, offset, cells);
+                hideGhost(cells);
             });
 
             cells[i].addEventListener('click', () => {
@@ -335,17 +388,18 @@ const Gameboard = (() => {
                 }
 
                 if (legalMove) {
-                    placeShip(player.ships[index], i, player, cells);
-                    index ++;
+                    placeShip(player.ships[shipIndex], i, player, cells);
+                    shipIndex ++;
 
                     //Switch round to combat if all ships placed.
-                    if (index > 4) {
+                    if (shipIndex > 4) {
                         startCombat(player, com);
                     }
                 }
             });
 
         }
+        
 
     }
 
@@ -369,7 +423,7 @@ const Gameboard = (() => {
                 (flip === 0) ? offset = 1 : offset = 10;
                 
                 ghostShip(com.ships[i], index, offset, comCells);
-                hideGhost(com.ships[i], index, offset, comCells);
+                hideGhost(comCells);
             }
 
             //Choose a random index to place a ship;
@@ -381,18 +435,14 @@ const Gameboard = (() => {
             }
 
             placeShip(com.ships[i], index, com, comCells)
-        }
-
-        if (!initialCombat) {
-            return;
-        }
+        }   
 
         //Add event listener for marking a strike on the computer.
         for (let i = 0; i < cells.length; i++) {
             targetCells[i].addEventListener('click', () => {
 
                 //Stop the entire function if the game is over.
-                if (getWinner(player,com) !== undefined) return;
+                if (gameOver) return;
                 
                 //Prevent reclicking an already selected cell.
                 if (chosenCells.includes(i)) {
@@ -419,6 +469,7 @@ const Gameboard = (() => {
                         //Animate the captain.
                         animateCap('mad');
                         shakeGrid();
+                        updateScore();
 
                         //Display the whole sunken battleship.
                         for (let j = 0; j < BoardState.comCells.length; j++) {
@@ -433,13 +484,18 @@ const Gameboard = (() => {
                     targetCells[i].classList.add('miss');
                     
                 }
-                getWinner(player, com);
 
+                if (!gameOver) {
+                    getWinner(player, com);
+                }
+                
                 //Play an AI turn if the game is not over.
                 if (getWinner(player,com) !== undefined) return;
                 comTurn();
 
-                getWinner(player, com);
+                if (!gameOver) {
+                    getWinner(player, com);
+                }
             });
         }       
         
@@ -617,10 +673,20 @@ const Gameboard = (() => {
 
         //Return the winner if there is one.
         if (playerTotal === 5) {
+            if (!gameOver) {
+                showEndGame('VICOTORY');
+            }
+            
             console.log('Player Wins');
+            gameOver = true;
             return player;
         } else if (comTotal === 5) {
+            if (!gameOver) {
+                showEndGame('FAILURE');
+            }
             console.log('Computer wins!');
+            
+            gameOver = true;
             return com;
         }
     }

@@ -1,5 +1,46 @@
 # battleship
 Battleship project for the Odin Project.
+--Features---
+
+    -Play the classic game, Shipbattle!
+
+    -Every ship represented by a ship girl
+
+    -Ship girls react to being hit or sunk by the enemy
+
+    -Multiple animations and faces for each ship girl
+
+    -Various stolen art for you, the captain, who reacts to your plays
+
+    -An mess of fetuccini code
+
+    -Rotate a ship before you place it with either the direction button or a right click
+
+    -Reset button for starting a new game
+
+    -Inidicator for illegal ship placement
+
+    -Enemy AI that will put up a serious fight
+
+    -Unless you find a layout that bugs his code out, because honestly it's not very good
+
+    -Click ship girls to play random animations
+
+    -Hover over ship girl info icons to:
+        -See their art
+        -See their name
+        -See their current damage
+        -Highlight them on you ship grid
+
+    -Score that tracks every enemy ship sunk
+
+    -Button to toggle greyscale on ship girls
+
+    -Button to see credits for "borrowed" assets
+
+    -A theme and layout inspired by the stolen captain art
+
+    -Tons of stylish transitions and animations throughout
 
 ---Devlog---
 
@@ -49,11 +90,21 @@ June 8th, 2022
 
     Base layout is done, and as usual took longer than expected to get mostly right. Worth the effort though. Half done the ship girl animation function, and it seems like it'll be quite straightforward, as it's working at a basic level already.
 
+June 9th, 2022
+
+    I think this is day five now. Game looks great, but I keep adding features. Lots of quick and easy cute things though. 
+
+    Still a nightmare to fix bugs in here. Outside of the crappy enemy AI, though, it works ok. Just gonna add a button for greyscale and credits for the art I stole and the fonts.
+
+    Polyphia has a new single out, "Playing God". Goes really well with the feel of Shipbattle.
+
+    Aaaaaand it's done. Estimated three or so days and took just under five while adding tons of fun stuff. Now to put away that brown slurry and do the final commit.
+
 ---To-Do---
 
--Add game art
+DONE-Add game art
 DONE-Digitize game art
--Fancy up display styling
+DONE-Fancy up display styling
 DONE-Finish ship logic
 CANCEL-Add tests for ship logic
 HARD CANCEL-Spice up battleship base gameplay?
@@ -67,16 +118,19 @@ DONE-make player able to use target grid to hit ships
 DONE-Make AI able to use their target grid to hit ships
 DONE-Add game end state
 DONE-Add new game button
--Add peeking at AI board with transforms
--add custom strike/miss markers
--Add hit markers to players' boards
+CANCEL-Add peeking at AI board with transforms
+DONE SORTA-add custom strike/miss markers
+DONE-Add hit markers to players' boards
 DONE-Prevent AI cells exceeding grid limits
 DONE-Fix double placing ships
 DONE-Fix ship damage bug
--Add actual victory or loss screen
--add credit to gosti on dribbble and fonts and me
--add shortcut for rotating ship placement
--implement score counter
--add buttons to watch specific shipgirl react to your strikes
+DONE-Add actual victory or loss screen
+DONE-add credit to gosti on dribbble and fonts and me
+DONE-add shortcut for rotating ship placement
+DONE-implement score counter
+DONE-add buttons to watch specific shipgirl react to your strikes
 DONE-fix scrollbar bug
--fix ship ghost remaining bug
+DONE-fix ship ghost remaining bug
+DONE-add button to toggle ship girl greyscale
+DONE-Wider layout media query
+-customize favicon

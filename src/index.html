@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <title>Getting Farted</title>
+    <link rel="icon" type="image/x-icon" href="/images/des-icon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1"><script defer src="main.bundle.js"></script>
     
   </head>
@@ -11,9 +12,33 @@
         <div id='header'>
             <h1>ShipBattle</h1>
             <h3>The battle for shipping shipgirls</h3>
+            <div id='headerbtnbox'>
+                <button id='creditsbtn'>Credits <br>
+                    Vladimir Nikolic: Vogue font <br>
+                    Woodcutter: Profile icon <br>
+                    GOSTI on Dribbble: Captain Art <br>
+                    Me, your boy: Ship girls art
+                </button>
+                <button id='colorbtn'>p</button>
+                
+            </div>
+            
         </div>
 
         <div id='gridscontainer'>
+            <div id='iconbox'>
+                <div id='iconname'>DESTROYER</div>
+                <img id='destroyer' class='icon' src="/images/des-icon.png" alt="Destroyer's icon">
+                <img id='submarine' class='icon' src="/images/sub-icon.png" alt="Submarines's icon">
+                <img id='cruiser' class='icon' src="/images/cru-icon.png" alt="Cruisers's icon">
+                <img id='battleship' class='icon' src="/images/bat-icon.png" alt="Battleship's icon">
+                <img id='carrier' class='icon' src="/images/car-icon.png" alt="Carrier's icon">
+                <div id='icondmg'>0 DMG</div>
+
+            </div>
+            <div id='gameoverpanel'>
+                <div id='gamestatus'>Vicotory</div>
+            </div>
             <h2>Your Ships</h2>
             <div></div>
             <h2>Enemy Territory</h2>
@@ -34,7 +59,7 @@
             <div id='btnbox'>
                 
                 <div id='scorebox'>
-                    <div id='score'>55</div>
+                    <div id='score'>0</div>
                 </div>
                 <h2>score</h2>
                 <h3 id='direction'>Horizontal</h3>
@@ -43,12 +68,16 @@
             </div>
 
             <div id='girlbox'>
+                
+
                 <img id='girlimg' src="/images/bat-glad.png" alt="A portrait of your shipgirl">
             </div>
         </div>
 
 
+
     </div>
+
 
 
 
