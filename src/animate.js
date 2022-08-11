@@ -11,7 +11,7 @@ const animate = (ship, mood) => {
     lastShip = ship.shipName;
 
     const nick = ship.shipName.slice(0, 3);
-    girlImg.src = `images/${nick}-${mood}.png`;
+    girlImg.src = require(`/src/images/${nick}-${mood}.png`);
 
     const classChoice =  `girl${mood}`;
 
@@ -27,7 +27,7 @@ const animate = (ship, mood) => {
 //Animate the captain.
 const animateCap = (mood) => {
 
-    capImg.src = `images/cap-${mood}.png`;
+    capImg.src = require(`/src/images/cap-${mood}.png`);
     
     capImg.classList.remove('capani');
     void capImg.offsetWidth;
@@ -55,7 +55,7 @@ girlImg.addEventListener('click', () => {
         const moods = ['def', 'glad', 'mad'];
         const randMood = moods[Math.floor(Math.random() * 3)];
         const nick = lastShip.slice(0, 3);
-        girlImg.src = `images/${nick}-${randMood}.png`;
+        girlImg.src = require(`/src/images/${nick}-${randMood}.png`);
  
         girlImg.classList.add(`girl${randMood}`);
 });

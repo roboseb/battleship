@@ -1,11 +1,11 @@
 @font-face {
     font-family: vogue;
-    src: url('/dist/Vogue.ttf');
+    src: url('/src/fonts/Vogue.ttf');
 }
 
 @font-face {
     font-family: profile;
-    src: url('/dist/Profile.ttf');
+    src: url('/src/fonts/Profile.ttf');
 }
 
 :root {
@@ -341,7 +341,7 @@ button:active {
 }
 
 #capimg {
-    height: 500px;
+    height: 400px;
     left: 50%;
     transform: translateX(-50%);
     bottom: -150px;
@@ -351,7 +351,7 @@ button:active {
     right: 50%;
     transform: translate(50%);
     bottom: 0;
-    height: 350px;
+    height: 260px;
     filter: grayscale(100%);
     transition: filter 0.4s;
 }
